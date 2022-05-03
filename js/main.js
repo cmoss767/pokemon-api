@@ -1,5 +1,5 @@
 //Example fetch using pokemonapi.co
-// document.querySelector('button').addEventListener('click', run)
+document.querySelector('button').addEventListener('click', run)
 
 
     
@@ -39,24 +39,38 @@ const TYPES = [
 // Functions
 const capitalize = (str) => str[0].toUpperCase() + str.substr(1);
 
-  // function run() {
+const resetScreen = () => {
+  mainScreen.classList.remove('hide');
+  for (const type of TYPES) {
+    mainScreen.classList.remove(type);
+  }
+};
+
+  function run() {
     const poke = document.querySelector('#poke').value
-    const url = 'https://pokeapi.co/api/v2/pokemon/ditto'+poke
-    console.log(url)
+    const url = 'https://pokeapi.co/api/v2/pokemon/'+poke
+    resetScreen();
+   
    
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        console.log(data)
-        console.log(data.name)
-        console.log(data.id)
-        console.log(data.weight)
-        console.log(data.height)
-        console.log(data.types[0].type.name)
-        console.log(data.sprites['front_default'])
-        console.log(data.sprites['back_default'])
+
+        
+        
      
-       
+        const dataTypes = data['types'];
+        const dataFirstType = dataTypes[0];
+        const dataSecondType = dataTypes[1];
+        pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
+        if (dataSecondType) {
+          pokeTypeTwo.classList.remove('hide');
+          pokeTypeTwo.textContent = capitalize(dataSecondType['type']['name']);
+        } else {
+          pokeTypeTwo.classList.add('hide');
+          pokeTypeTwo.textContent = '';
+        }
+        mainScreen.classList.add(dataFirstType['type']['name']);
         
   
     
@@ -80,7 +94,7 @@ const capitalize = (str) => str[0].toUpperCase() + str.substr(1);
         const id = listItem.textContent.split('.')[0];
         fetchPokeData(id);
       };
-  // };
+  };
 
 
 
